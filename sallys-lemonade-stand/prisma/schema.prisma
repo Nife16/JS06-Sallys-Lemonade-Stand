@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  address   Address? @relation(fields: [addressId], references: [id])
+  addressId Int?     @unique
+  rewards   Rewards? @relation(fields: [rewardsId], references: [id])
+  rewardsId Int?     @unique
+}
+
+model Address {
+  id           Int    @id @default(autoincrement())
+  streetNumber String
+  streetName   String
+  cityName     String
+  stateName    String
+  zipCode      String
+  user         User?
+}
+
+model Product {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String
+  inventory   Int
+  price       Decimal
+}
+
+model Rewards {
+  id               Int     @id @default(autoincrement())
+  rewardPoints     Decimal
+  reedemablePoints Int
+  User             User?
+}
