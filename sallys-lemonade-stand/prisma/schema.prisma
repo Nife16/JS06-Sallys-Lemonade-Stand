@@ -11,14 +11,12 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String
-  password  String
-  address   Address? @relation(fields: [addressId], references: [id])
-  addressId Int?     @unique
-  rewards   Rewards? @relation(fields: [rewardsId], references: [id])
-  rewardsId Int?     @unique
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  name     String
+  password String
+  address  Address?
+  rewards  Rewards?
 }
 
 model Address {
@@ -28,7 +26,8 @@ model Address {
   cityName     String
   stateName    String
   zipCode      String
-  user         User?
+  user         User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       Int?   @unique
 }
 
 model Product {
@@ -36,12 +35,15 @@ model Product {
   name        String  @unique
   description String
   inventory   Int
-  price       Decimal
+  price       Decimal @db.Decimal(9, 2)
 }
 
 model Rewards {
   id               Int     @id @default(autoincrement())
-  rewardPoints     Decimal
+  rewardPoints     Decimal @db.Decimal(9, 4)
   reedemablePoints Int
-  User             User?
+  User             User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           Int?    @unique
 }
+
+

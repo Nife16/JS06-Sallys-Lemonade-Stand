@@ -6,5 +6,5 @@ export interface IProduct {
   name: string
   description: string
   inventory: number
-  price: number
+  price: string
 }

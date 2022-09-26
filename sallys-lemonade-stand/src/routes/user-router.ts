@@ -3,6 +3,8 @@ import { Request, Response, Router } from 'express';
 
 import userService from '@services/user-service';
 import { ParamMissingError } from '@shared/errors';
+import { IUser } from '@models/user-model';
+import { emitWarning } from 'process';
 
 
 // **** Variables **** //
@@ -33,6 +35,29 @@ router.get("/getAll", async (_: Request, res: Response) => {
     await userService.signUp(user);
     return res.status(OK).json({message: "created"});
 });
+
+/**
+ * Sign In User
+ */
+ router.post("/signIn", async (req: Request, res: Response) => {
+
+    const {user} = req.body
+
+    const signedInUser: IUser = await userService.signIn(user);
+    return res.status(OK).json({signedInUser});
+});
+
+/**
+ * Delete User
+ */
+ router.delete("/delete/:id", async (req: Request, res: Response) => {
+
+    const {id} = req.params
+
+    await userService.deleteUser(Number(id));
+    return res.status(OK).json({message: "BLah"});
+});
+
 
 
 

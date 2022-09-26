@@ -32,20 +32,25 @@ const { CREATED, OK, BAD_REQUEST } = StatusCodes;
 /**
  * Create Address
  */
- router.post("/create/:userId", async (req: Request, res: Response) => {
+ router.post("/create", async (req: Request, res: Response) => {
 
-    const {userId} = req.params
-    const {address} = req.body
+    const {address, userId} = req.body
 
-    const savedAddress = await addressService.createAddress(address);
-
-    const user = userService.getById(userId)
-
-    user.address = savedAddress
-
-    userService.save(user)
+    const savedAddress = await addressService.createAddress(address, Number(userId));
     
-    return res.status(OK).json({message: "created"});
+    return res.status(OK).json({address: savedAddress});
+});
+
+/**
+ * Update Address
+ */
+ router.post("/update", async (req: Request, res: Response) => {
+
+    const { address } = req.body
+    
+    const updatedAddress = await addressService.updateAddress(address);
+    
+    return res.status(OK).json({address: updatedAddress});
 });
 
 export default router

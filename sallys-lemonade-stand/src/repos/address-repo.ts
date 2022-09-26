@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 // **** Functions **** //
 
 /**
- * Get one user
+ * Get one address
  */
  async function getById(id: number): Promise<IAddress> {
   
@@ -20,11 +20,31 @@ const prisma = new PrismaClient()
 }
 
 /**
- * Get one user
+ * create address
  */
-async function createAddress(address: IAddress): Promise<void> {
+async function createAddress(address: IAddress, userId: number): Promise<IAddress> {
   
   return await prisma.address.create({
+    data: {
+      streetNumber: address.streetNumber,
+      streetName: address.streetName,
+      cityName: address.cityName,
+      stateName: address.stateName,
+      zipCode: address.zipCode,
+      userId: userId
+    }
+  })
+
+}
+/**
+ * update address
+ */
+ async function updateAddress(address: IAddress): Promise<IAddress> {
+  
+  return await prisma.address.update({
+    where: {
+      id: address.id
+    },
     data: {
       streetNumber: address.streetNumber,
       streetName: address.streetName,
@@ -42,5 +62,6 @@ async function createAddress(address: IAddress): Promise<void> {
 
 export default {
   getById,
-  createAddress
+  createAddress,
+  updateAddress
 } as const;
